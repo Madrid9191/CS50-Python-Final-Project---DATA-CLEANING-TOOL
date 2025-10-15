@@ -43,45 +43,41 @@ Since this step requires no user interaction, only informative progress messages
 ---
 
 ### 2. Removing Extra Spaces
-In many cases, values with spaces before or after them can be treated as different, even if they are the same.  
-To fix this, a function automatically removes unnecessary spaces.
-
-All columns are temporarily converted to text using `astype(str)` so that `.str.strip()` can be safely applied.  
-This removes spaces from both text and numeric values such as `' 42 '` or `' 2024-10-01 '`.  
+In many cases, values with spaces before or after them can be treated as different, even if they are the same. 
+For this reason, a function was added to remove unnecessary spaces. This operation is automatic and shows progress messages. 
+To achieve this, the data type of every column is converted to text (astype(str)), allowing the .str.strip() method to be applied safely. 
+This also removes spaces from numeric or date values such as ' 42 ' or ' 2024-10-01 '.
 
 ---
 
 ### 3. Converting Column Data Types
 Because stripping spaces changes column data types—and inconsistent formatting is common—a function was added to convert the data type of specific columns.
 
-- First, it displays the current data types of all columns.  
-- Then, it asks the user for a column name or allows skipping by typing “No”.  
-- If a valid column is entered, the program asks for a target data type: `int`, `float`, `str`, or `datetime`.  
-- If invalid input is detected, the user is prompted again.  
-- Failed conversions trigger a warning message.
+-First, the function displays the current data types of all columns so that the user can identify which ones need to be converted.
+-Then, it asks the user to enter the name of a column or type “No” to skip the step. 
+-If a valid column name is provided, the program prompts for a target data type and shows the available options: int, float, str, and datetime. 
+-If the user enters a non-existent column or invalid data type, an error message is displayed, and the input is requested again. 
+-If the conversion fails, a warning message is shown.
 
 ---
 
 ### 4. Normalizing Text Capitalization
-To standardize text values, another function capitalizes the **first letter of each word** and makes the rest lowercase.  
-This helps prevent values like “dog” and “Dog” from being treated as different.
-
-The program lists all columns and lets the user specify which ones to normalize.  
-Typing “No” skips this step.  
-If a non-text column is selected, an error message is displayed.
+To standardize text values, a function was included that capitalizes the first letter of each word and makes the rest lowercase. 
+This helps prevent values like “dog” and “Dog” from being treated as different due to case differences. 
+The program lists all column names and asks the user to specify one or several columns to apply this normalization. 
+If the user doesn’t wish to perform this step, they can simply type “No.” 
+If an invalid or non-text column is selected, the program displays an error message and asks again.
 
 ---
 
 ### 5. Removing Duplicates
-The program first displays the name of each column along with the number of duplicate values it contains.  
-Then, it asks for a specific column name to remove duplicates from.
+To remove duplicates, the program first displays the name of each column along with the number of duplicate values it contains. 
+Then, it asks the user to enter the name of a column from which to delete duplicate rows or type "No" to skip this step. 
 
-If an invalid name is entered, it shows:  
-**❌ “Column name does not exist.”**  
-and asks again.  
+If an invalid name is entered the message **"❌ Column name does not exist.”** is shown, and the input is requested again. 
 
-Unlike global deduplication, this approach lets the user decide which column to clean—useful when repeated values in some columns are legitimate.  
-This function is placed at the end to ensure duplicates caused by capitalization or spacing are properly handled.
+It was intentionally designed to let users choose a specific column rather than remove all duplicates globally, since in some cases, repeated values in certain columns are not errors. 
+This function was placed at the end to ensure that no duplicates caused by capitalization or spacing issues remain undetected.
 
 ---
 
